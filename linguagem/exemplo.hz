@@ -1,0 +1,28 @@
+# Exemplo oficial do Hzhon 0.1
+
+funcao soma(a, b)
+    retorne a + b
+fim
+
+fixo nome = "Hzhon"
+var total = soma(7, 5)
+imprimir nome + " — resultado: " + texto(total)
+
+var numeros = [1, 2, 3, 4, 5]
+var acumulado = 0
+para_cada numero em numeros
+    acumulado = acumulado + numero
+fim
+imprimir "Soma da lista: " + texto(acumulado)
+
+se acumulado > 10 e nome == "Hzhon"
+    imprimir "A linguagem está funcionando!"
+senao
+    imprimir "Algo precisa ser investigado."
+fim
+
+var contador = 0
+enquanto contador < 3
+    imprimir "contagem " + texto(contador)
+    contador = contador + 1
+fim

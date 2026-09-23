@@ -1,0 +1,32 @@
+site "Hzhon Studio — sites em português"
+    tema "escuro"
+    pagina inicio "/"
+        navegacao
+        cabecalho "HZHON STUDIO / ALPHA"
+            titulo "Crie para a web sem sair da sua linguagem."
+            subtitulo "Este site foi descrito em Hzhon e gerado como HTML, CSS e uma experiência pronta para abrir no navegador."
+            botao "Ver recursos" "#recursos"
+        fim
+        secao "Uma sintaxe, vários resultados"
+            cartao "Sites"
+                texto "Landing pages, portfólios, documentação e páginas de produto usando blocos legíveis em português."
+            fim
+            cartao "Termux"
+                texto "Crie, construa e sirva projetos diretamente no celular com comandos simples."
+            fim
+            cartao "Evolução"
+                texto "A mesma base poderá gerar APIs, automações e projetos com Luau no futuro."
+            fim
+        fim
+        secao "Como funciona"
+            codigo "site \"Meu site\"\n  tema \"escuro\"\n  pagina inicio \"/\"\n    titulo \"Olá, web\"\n  fim\nfim"
+        fim
+        secao "Entre na construção"
+            formulario "Receba as novidades" "#contato"
+                campo "nome" "Seu nome" "text"
+                campo "email" "Seu e-mail" "email"
+            fim
+        fim
+        rodape "Construído com Hzhon — programação em português."
+    fim
+fim

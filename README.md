@@ -11,6 +11,7 @@ Este repositório reúne o site oficial da linguagem e a implementação alpha. 
 - **DSL web alpha:** descreva páginas, seções, cartões e formulários em `.hz` sem escrever HTML diretamente.
 - **CLI Hzhon:** criar projetos, executar programas, construir sites, formatar arquivos, rodar testes e servir a pasta `dist`.
 - **Runtime:** interpretador inicial com variáveis, constantes, funções, listas, condicionais, laços, operadores e funções nativas.
+- **Hzhon-Luau beta:** transpiler com alvos `server`, `local` e `module`, RemoteEvents, ModuleScripts, Attributes e DataStores.
 - **Documentação:** especificação técnica e roadmap em `linguagem/ESPECIFICACAO_ALPHA.md`.
 
 ## Site oficial
@@ -79,7 +80,7 @@ fim
 
 ## Roadmap
 
-A evolução planejada inclui mapas e JSON, requisições HTTP, servidor de APIs, módulos e pacotes, tipagem gradual, bytecode, REPL, biblioteca padrão, ferramentas de editor e a variante Hzhon-Luau.
+A evolução planejada inclui mapas e JSON, requisições HTTP, servidor de APIs, módulos e pacotes, tipagem gradual, bytecode, REPL, biblioteca padrão, ferramentas de editor e a integração Rojo para Hzhon-Luau.
 
 ## Licença
 

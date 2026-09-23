@@ -258,7 +258,7 @@ export default function Home() {
 
         <section className="roblox-section">
           <div className="page-width roblox-inner">
-            <div className="roblox-copy"><SectionKicker>HZHON-LUAU / ROBLOX</SectionKicker><h2>Do português<br /><em>para o jogo.</em></h2><p>Escreva scripts para Roblox com palavras em português e gere Luau para `LocalScript`, `Script` ou `ModuleScript`. A primeira camada já mapeia serviços, eventos, atributos e tarefas.</p><div className="roblox-pills"><span>game:GetService</span><span>PlayerAdded</span><span>SetAttribute</span><span>task.spawn</span></div><a href="#roadmap" className="text-link">ver a especificação Roblox <ArrowRight size={15} /></a></div>
+            <div className="roblox-copy"><SectionKicker>HZHON-LUAU / BETA</SectionKicker><h2>Do português<br /><em>para o jogo.</em></h2><p>Escreva scripts para Roblox com palavras em português e gere Luau para `LocalScript`, `Script` ou `ModuleScript`. A beta já mapeia serviços, eventos, RemoteEvents, atributos, DataStores e tarefas.</p><div className="roblox-pills"><span>RemoteEvent</span><span>ModuleScript</span><span>DataStore</span><span>--!strict</span></div><a href="#roadmap" className="text-link">ver a especificação Roblox <ArrowRight size={15} /></a></div>
             <div className="roblox-code"><div className="roblox-code-head"><span><span className="editor-dot" /> input.hz</span><ChevronRight size={14} /><span className="luau-file">LocalScript.client.luau</span><span className="luau-badge">--!strict</span></div><CodeWindow code={luauCode} label="LocalScript.client.luau" /></div>
           </div>
         </section>

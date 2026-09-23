@@ -1,0 +1,19 @@
+# Exemplo beta: servidor, comunicação cliente-servidor e persistência
+servico jogadores como Jogadores
+servico replicado como Replicado
+servico dados como Dados
+
+evento_remoto AtualizarInventario em Replicado
+abrir_dados Inventarios como "HzhonInventariosV1"
+
+ouvir Jogadores.PlayerAdded com funcao(jogador)
+    atributo jogador, "HzhonBeta", verdadeiro
+    var chave = texto(jogador.UserId)
+    carregar Inventarios chave chave como inventario
+    imprimir "Inventário carregado para " + texto(jogador.Name)
+fim
+
+receber AtualizarInventario com funcao(jogador, item)
+    salvar Inventarios chave texto(jogador.UserId) valor item
+    enviar AtualizarInventario para jogador com item
+fim

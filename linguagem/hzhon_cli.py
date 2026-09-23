@@ -14,6 +14,7 @@ from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
 from pathlib import Path
 
 from hzhon import executar_fonte
+from hzhon_luau import transpilar as transpilar_luau
 
 
 @dataclass
@@ -190,6 +191,10 @@ def main(argv=None) -> int:
     servir = sub.add_parser("servir", help="servir uma pasta construída")
     servir.add_argument("pasta", nargs="?", default="dist")
     servir.add_argument("--porta", type=int, default=8080)
+    luau = sub.add_parser("luau", help="transpilar para Roblox/Luau beta")
+    luau.add_argument("entrada")
+    luau.add_argument("-o", "--saida", default=None)
+    luau.add_argument("--alvo", choices=["server", "local", "module"], default="server")
     args = parser.parse_args(argv)
     try:
         if args.comando == "novo":
@@ -223,6 +228,12 @@ def main(argv=None) -> int:
                 if comando in aberturas: nivel += 1
             caminho.write_text("\n".join(saida) + "\n", encoding="utf-8")
             print(f"Arquivo formatado: {caminho}")
+            return 0
+        if args.comando == "luau":
+            entrada = Path(args.entrada)
+            destino = Path(args.saida) if args.saida else entrada.with_suffix(".luau")
+            destino.write_text(transpilar_luau(entrada.read_text(encoding="utf-8"), entrada.name, args.alvo), encoding="utf-8")
+            print(f"Luau beta gerado ({args.alvo}): {destino}")
             return 0
         if args.comando == "servir":
             pasta = Path(args.pasta).resolve()

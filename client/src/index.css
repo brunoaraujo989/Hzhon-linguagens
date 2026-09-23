@@ -123,3 +123,9 @@ h1 em, h2 em { color: var(--coral); font-style: italic; }
 
 @media (max-width: 900px) { .capabilities-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 620px) { .capabilities-grid { grid-template-columns: 1fr; margin-top: 45px; } .capability-card { min-height: 245px; } .capability-card h3 { margin-top: 42px; } }
+
+.roblox-section { padding: 130px 0 140px; color: #e9f2e9; background: #223732; }
+.roblox-inner { display: grid; grid-template-columns: .78fr 1.22fr; align-items: center; gap: 90px; }
+.roblox-copy .section-kicker { color: var(--mint); }.roblox-copy h2 { margin-top: 18px; font: 400 clamp(42px, 4.4vw, 64px)/1.01 var(--display); letter-spacing: -.045em; }.roblox-copy h2 em { color: var(--coral); }.roblox-copy p { max-width: 385px; margin-top: 23px; color: rgba(232,242,232,.63); font-size: 13px; line-height: 1.75; }.roblox-pills { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 25px; }.roblox-pills span { padding: 6px 9px; border: 1px solid rgba(185,225,207,.22); border-radius: 5px; color: rgba(224,240,226,.7); background: rgba(185,225,207,.06); font: 9px var(--mono); }.roblox-copy .text-link { color: var(--mint); border-color: rgba(185,225,207,.28); }.roblox-code { min-width: 0; }.roblox-code-head { display: flex; align-items: center; gap: 9px; margin-bottom: 13px; color: rgba(229,241,230,.52); font: 10px var(--mono); }.roblox-code-head > span:first-child { display: inline-flex; align-items: center; gap: 7px; }.luau-file { color: var(--mint); }.luau-badge { margin-left: auto; color: var(--coral); }.roblox-code .code-window { background: rgba(12,24,21,.72); }.roblox-code .code-window pre { min-height: 230px; }
+@media (max-width: 900px) { .roblox-inner { grid-template-columns: 1fr; gap: 50px; } .roblox-copy p { max-width: 600px; } }
+@media (max-width: 620px) { .roblox-section { padding: 90px 0; } .roblox-code-head { flex-wrap: wrap; } .luau-badge { margin-left: 0; } }

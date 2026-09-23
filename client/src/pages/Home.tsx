@@ -37,6 +37,16 @@ fim
 
 imprimir "Total: " + texto(total)`;
 
+const luauCode = `servico jogadores como Jogadores
+servico entrada como Entrada
+var jogador = Jogadores.LocalPlayer
+
+ouvir Entrada.InputBegan com funcao(input, processado)
+    se processado == falso
+        imprimir "Tecla pressionada"
+    fim
+fim`;
+
 const navItems = [
   ["A linguagem", "#linguagem"],
   ["Playground", "#playground"],
@@ -244,6 +254,13 @@ export default function Home() {
         <section className="capabilities-section page-width">
           <div className="section-heading split-heading"><div><SectionKicker>ALÉM DO PLAYGROUND</SectionKicker><h2>Uma linguagem.<br /><em>Várias portas.</em></h2></div><p>O objetivo não é fazer uma ferramenta que só demonstra sintaxe. É construir uma base que acompanhe projetos diferentes, do primeiro site à automação real.</p></div>
           <div className="capabilities-grid">{capabilities.map(([tag, title, text], index) => <article className={`capability-card capability-${index + 1}`} key={tag}><span className="capability-tag">{tag}</span><div className="capability-line" /><h3>{title}</h3><p>{text}</p><a href="#roadmap" className="text-link">ver no roadmap <ArrowRight size={14} /></a></article>)}</div>
+        </section>
+
+        <section className="roblox-section">
+          <div className="page-width roblox-inner">
+            <div className="roblox-copy"><SectionKicker>HZHON-LUAU / ROBLOX</SectionKicker><h2>Do português<br /><em>para o jogo.</em></h2><p>Escreva scripts para Roblox com palavras em português e gere Luau para `LocalScript`, `Script` ou `ModuleScript`. A primeira camada já mapeia serviços, eventos, atributos e tarefas.</p><div className="roblox-pills"><span>game:GetService</span><span>PlayerAdded</span><span>SetAttribute</span><span>task.spawn</span></div><a href="#roadmap" className="text-link">ver a especificação Roblox <ArrowRight size={15} /></a></div>
+            <div className="roblox-code"><div className="roblox-code-head"><span><span className="editor-dot" /> input.hz</span><ChevronRight size={14} /><span className="luau-file">LocalScript.client.luau</span><span className="luau-badge">--!strict</span></div><CodeWindow code={luauCode} label="LocalScript.client.luau" /></div>
+          </div>
         </section>
 
         <section className="compare-section page-width">

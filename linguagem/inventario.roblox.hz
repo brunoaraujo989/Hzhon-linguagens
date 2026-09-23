@@ -1,0 +1,25 @@
+# Hzhon-Luau: Script de servidor para inventário simples
+servico jogadores como Jogadores
+servico replicado como Replicado
+
+fixo itens_iniciais = ["Bastão", "Poção"]
+
+funcao preparar_jogador(jogador)
+    var inventario = {}
+    atributo jogador, "HzhonPronto", verdadeiro
+    imprimir "Inventário preparado para " + texto(jogador.Name)
+    retorne inventario
+fim
+
+funcao adicionar_item(inventario, item)
+    table.insert(inventario, item)
+    retorne inventario
+fim
+
+ouvir Jogadores.PlayerAdded com funcao(jogador)
+    var inventario = preparar_jogador(jogador)
+    para_cada item em itens_iniciais
+        adicionar_item(inventario, item)
+    fim
+    imprimir "Itens iniciais entregues"
+fim

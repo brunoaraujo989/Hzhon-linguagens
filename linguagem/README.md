@@ -114,3 +114,7 @@ O instalador para Termux cria um wrapper em `$PREFIX/bin`, dentro da área execu
 ## Licença
 
 Protótipo inicial disponibilizado sob licença MIT.
+
+## Roblox e Luau
+
+A variante Hzhon-Luau transpila scripts Roblox escritos em português para Luau. Use `python3 hzhon_cli.py luau inventario.roblox.hz -o inventario.server.luau`. Consulte `ROBLOX.md` para os recursos alpha, limites e fluxo com Rojo/Roblox Studio.

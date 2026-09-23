@@ -2,7 +2,7 @@
 
 **Hzhon** é uma linguagem de programação experimental em português. A implementação de referência é um interpretador escrito em Python, com lexer, parser, AST implícita e ambiente de execução.
 
-> O runtime atual integra a beta 0.5 da Hzhon. A especificação histórica está em [ESPECIFICACAO_ALPHA.md](ESPECIFICACAO_ALPHA.md), e a evolução Roblox está em [ROBLOX_BETA.md](ROBLOX_BETA.md).
+> O runtime atual integra a beta 0.7 da Hzhon. A especificação histórica está em [ESPECIFICACAO_ALPHA.md](ESPECIFICACAO_ALPHA.md), e a evolução Roblox está em [ROBLOX_BETA.md](ROBLOX_BETA.md).
 
 ## Executar
 
@@ -10,6 +10,12 @@ Requer Python 3.10 ou mais recente.
 
 ```bash
 python3 hzhon.py exemplo.hz
+```
+
+Sem arquivo, o comando abre o REPL:
+
+```bash
+python3 hzhon.py
 ```
 
 Saída esperada:
@@ -31,6 +37,10 @@ As estruturas de controle são `se`, `senao_se`, `senao`, `enquanto` e `para_cad
 
 Os operadores disponíveis incluem `+`, `-`, `*`, `/`, `%`, comparações, `e`, `ou` e `nao`. O operador `+` também concatena textos. Comentários de linha começam com `#`; comentários de bloco usam `/* ... */`.
 
+Mapas usam `{ chave: valor }`, e suas propriedades podem ser lidas e alteradas
+com ponto. Módulos locais são carregados com `importe "arquivo.hz"`. Erros
+podem ser lançados com `lance` e tratados com `tente`, `capture` e `fim`.
+
 ## Funções nativas
 
 | Função | Finalidade |
@@ -40,6 +50,15 @@ Os operadores disponíveis incluem `+`, `-`, `*`, `/`, `%`, comparações, `e`, 
 | `numero(valor)` | Converte um valor para número. |
 | `faixa(fim)` | Cria uma lista de inteiros de zero até `fim - 1`. |
 | `juntar(lista, separador)` | Junta os itens de uma lista em um texto. |
+| `chaves(mapa)` | Retorna as chaves de um mapa. |
+| `valores(mapa)` | Retorna os valores de um mapa. |
+| `contem(colecao, valor)` | Verifica se uma coleção contém um valor. |
+| `maiusculas(valor)` | Converte um texto para maiúsculas. |
+| `minusculas(valor)` | Converte um texto para minúsculas. |
+| `recortar(valor, inicio, fim)` | Recorta uma parte de um texto. |
+| `tipo(valor)` | Retorna o tipo Hzhon do valor. |
+| `ler_arquivo(caminho)` | Lê um arquivo de texto local. |
+| `escrever_arquivo(caminho, conteudo)` | Grava um arquivo de texto local. |
 
 ## Arquitetura
 
@@ -56,7 +75,8 @@ A especificação alpha cobre tipagem gradual, mapas, `escolha`, erros estrutura
 
 - **0.1 experimental:** base histórica implementada neste repositório.
 - **0.2 alpha:** mapas, tipos opcionais, `escolha`, erros estruturados, REPL e módulos locais.
-- **0.5 beta:** bytecode, biblioteca padrão, testes nativos, formatador, linter e extensão VS Code.
+- **0.5 beta inicial:** RemoteEvents, ModuleScripts, DataStores e alvos server/local/module.
+- **0.7 beta atual:** mapas, módulos locais, tratamento de erros, REPL, verificador de sintaxe e projetos multiplataforma.
 - **1.0 estável:** pacotes, FFI, WebAssembly, backend Luau e compatibilidade retroativa.
 
 ## Testes
@@ -96,7 +116,7 @@ fim
 fim
 ```
 
-O comando `construir` gera `index.html` e o comando `servir` inicia um servidor local compatível com Linux e Termux. O arquivo `site-demo.hz` deste repositório é um exemplo real usado nos testes da alpha.
+O comando `construir` gera `index.html` e o comando `servir` inicia um servidor local compatível com Linux e Termux. O arquivo `site-demo.hz` deste repositório é um exemplo real usado nos testes da beta 0.7.
 
 Para criar um projeto Roblox beta:
 

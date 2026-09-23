@@ -2,7 +2,7 @@ site "Hzhon Studio — sites em português"
     tema "escuro"
     pagina inicio "/"
         navegacao
-        cabecalho "HZHON STUDIO / ALPHA"
+        cabecalho "HZHON STUDIO / BETA 0.7"
             titulo "Crie para a web sem sair da sua linguagem."
             subtitulo "Este site foi descrito em Hzhon e gerado como HTML, CSS e uma experiência pronta para abrir no navegador."
             botao "Ver recursos" "#recursos"
@@ -15,7 +15,7 @@ site "Hzhon Studio — sites em português"
                 texto "Crie, construa e sirva projetos diretamente no celular com comandos simples."
             fim
             cartao "Evolução"
-                texto "A mesma base poderá gerar APIs, automações e projetos com Luau no futuro."
+                texto "A mesma base já pode gerar sites, automações e projetos com Luau."
             fim
         fim
         secao "Como funciona"

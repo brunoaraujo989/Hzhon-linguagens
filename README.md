@@ -7,10 +7,11 @@ Este repositório reúne o site oficial da linguagem e a implementação beta. A
 ## O que existe aqui
 
 - **Site oficial:** aplicação Vite + React na raiz do repositório.
+- **Site compilado:** a pasta `site/` já pode ser servida sem Node.js, usando a CLI Hzhon.
 - **Playground:** editor interativo com exemplos Hzhon dentro do site.
 - **DSL web beta:** descreva páginas, seções, cartões e formulários em `.hz` sem escrever HTML diretamente.
 - **CLI Hzhon:** criar projetos, executar programas, construir sites, formatar arquivos, rodar testes e servir a pasta `dist`.
-- **Runtime:** interpretador inicial com variáveis, constantes, funções, listas, condicionais, laços, operadores e funções nativas.
+- **Runtime 0.7 beta:** interpretador com variáveis, constantes, funções, listas, mapas, propriedades, módulos locais, tratamento de erros, REPL e funções nativas.
 - **Hzhon-Luau beta:** transpiler com alvos `server`, `local` e `module`, RemoteEvents, ModuleScripts, Attributes e DataStores.
 - **Documentação:** especificação técnica e roadmap em `linguagem/ESPECIFICACAO_ALPHA.md`.
 
@@ -29,6 +30,13 @@ Para gerar a versão de produção:
 pnpm build
 ```
 
+Também existe uma versão pronta em `site/`. Para servi-la sem instalar Node.js:
+
+```bash
+cd linguagem
+python3 hzhon_cli.py servir ../site --porta 8080
+```
+
 O projeto já possui `vercel.json` configurado para Vercel com Vite. No Vercel, importe este repositório, mantenha o framework como **Vite** e publique.
 
 ## Usar a linguagem
@@ -39,6 +47,29 @@ Entre na implementação:
 cd linguagem
 python3 hzhon_cli.py --help
 python3 -m unittest -v
+```
+
+O runtime não usa bibliotecas externas e funciona com Python 3.10 ou mais recente.
+Isso permite usar a Hzhon em Termux, Linux, macOS e Windows.
+
+### Instalação em Termux, Linux e macOS
+
+```bash
+cd linguagem
+bash instalar-termux.sh
+hzhon --help
+```
+
+O instalador detecta `python3` ou `python`, usa `$PREFIX/bin` no Termux e
+`$HOME/.local/bin` em Linux/macOS. Se o comando não entrar no PATH, ele mostra
+a linha necessária.
+
+No Windows PowerShell:
+
+```powershell
+cd linguagem
+Set-ExecutionPolicy -Scope Process Bypass
+.\instalar.ps1
 ```
 
 Criar um site com Hzhon:
@@ -64,6 +95,14 @@ Criar um projeto Roblox com exemplos de servidor, cliente e módulo:
 hzhon novo roblox meu-jogo
 ```
 
+Criar um projeto comum:
+
+```bash
+hzhon novo projeto meu-app
+hzhon verificar meu-app/src/main.hz
+hzhon executar meu-app/src/main.hz
+```
+
 ## Exemplo Hzhon
 
 ```hzhon
@@ -84,9 +123,31 @@ fim
 fim
 ```
 
+A Hzhon 0.7 também aceita mapas, módulos e tratamento de erros:
+
+```hzhon
+importe "util.hz"
+
+var jogador = {
+    nome: "Ana",
+    nivel: 10
+}
+
+tente
+    lance "exemplo de erro"
+capture erro
+    imprimir "Falha: " + erro
+fim
+```
+
+O REPL pode ser aberto com `hzhon repl`.
+
 ## Roadmap
 
-A evolução planejada inclui mapas e JSON, requisições HTTP, servidor de APIs, módulos e pacotes, tipagem gradual, bytecode, REPL, biblioteca padrão, ferramentas de editor e a integração Rojo para Hzhon-Luau.
+A evolução planejada inclui JSON, requisições HTTP, servidor de APIs, pacotes,
+tipagem gradual, bytecode, biblioteca padrão, ferramentas de editor e a
+integração Rojo para Hzhon-Luau. Mapas, módulos locais, REPL e erros estruturados
+já fazem parte da beta 0.7.
 
 ## Licença
 

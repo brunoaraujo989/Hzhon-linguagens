@@ -92,13 +92,14 @@ const capabilities = [
   ["web", "Sites estáticos", "Descreva páginas, seções, cartões e formulários em Hzhon. Gere HTML e CSS sem escrever a camada final."],
   ["cli", "Ferramentas de terminal", "Crie projetos, execute arquivos, formate código, rode testes e sirva a saída local pelo Termux."],
   ["data", "Dados e automação", "O próximo núcleo adicionará mapas, JSON, arquivos e requisições para automatizar tarefas do dia a dia."],
-  ["game", "Jogos e Luau", "A visão alpha inclui uma saída para Luau, com APIs em português para experiências no Roblox."],
+  ["game", "Jogos e Luau", "A beta inclui uma saída para Luau, com APIs em português para experiências no Roblox."],
 ] as const;
 
 const roadmap = [
   { version: "0.1", label: "Protótipo", status: "concluído", text: "Interpretador executável, sintaxe base, funções, listas e estruturas de controle." },
   { version: "0.4", label: "Alpha", status: "concluído", text: "Runtime, gerador web, CLI Termux e primeira saída Hzhon-Luau para Roblox." },
-  { version: "0.5", label: "Beta", status: "agora", text: "RemoteEvents, ModuleScripts, DataStores, alvos server/local/module e projetos Roblox gerados." },
+  { version: "0.5", label: "Beta inicial", status: "concluído", text: "RemoteEvents, ModuleScripts, DataStores e alvos server/local/module." },
+  { version: "0.7", label: "Beta atual", status: "agora", text: "Mapas, módulos locais, tratamento de erros, REPL, verificador de sintaxe e projetos multiplataforma." },
   { version: "1.0", label: "Estável", status: "visão", text: "Pacotes, FFI, WebAssembly, backend Luau e compatibilidade retroativa." },
 ];
 
@@ -231,7 +232,7 @@ export default function Home() {
         <section className="signal-section">
           <div className="page-width signal-inner">
             <div className="signal-statement"><span className="quote-mark">“</span><p>Se a primeira barreira para programar é traduzir cada palavra, Hzhon começa removendo essa barreira.</p><span className="signal-caption">manifesto hzhon / 001</span></div>
-            <div className="signal-stats"><div><strong>0.5</strong><span>beta atual</span></div><div><strong>12</strong><span>testes passando</span></div><div><strong>MIT</strong><span>licença aberta</span></div></div>
+            <div className="signal-stats"><div><strong>0.7</strong><span>beta atual</span></div><div><strong>15</strong><span>testes passando</span></div><div><strong>MIT</strong><span>licença aberta</span></div></div>
           </div>
         </section>
 

@@ -1,8 +1,10 @@
 import io
+import tempfile
 import unittest
 from contextlib import redirect_stdout
+from pathlib import Path
 
-from hzhon import executar_fonte, HzhonErro
+from hzhon import HzhonErro, executar_fonte
 
 
 class TesteHzhon(unittest.TestCase):
@@ -30,6 +32,46 @@ class TesteHzhon(unittest.TestCase):
     def test_condicional_e_enquanto(self):
         fonte = 'var i = 0\nenquanto i < 2\n imprimir i\n i = i + 1\nfim'
         self.assertEqual(self.rodar(fonte), ['0', '1'])
+
+    def test_mapas_propriedades_e_nativas(self):
+        fonte = '''var pessoa = {
+    nome: "Ana",
+    idade: 22
+}
+pessoa.idade = pessoa.idade + 1
+imprimir pessoa.nome
+imprimir pessoa.idade
+imprimir tipo(pessoa)
+imprimir tamanho(pessoa)
+'''
+        self.assertEqual(self.rodar(fonte), ["Ana", "23", "mapa", "2"])
+
+    def test_tratamento_de_erros(self):
+        fonte = '''tente
+    lance "arquivo inválido"
+capture problema
+    imprimir problema
+fim
+'''
+        self.assertEqual(self.rodar(fonte), ["arquivo inválido"])
+
+    def test_importa_modulo_local(self):
+        with tempfile.TemporaryDirectory() as pasta:
+            raiz = Path(pasta)
+            (raiz / "util.hz").write_text(
+                "funcao dobro(valor)\n    retorne valor * 2\nfim\n",
+                encoding="utf-8",
+            )
+            principal = raiz / "main.hz"
+            principal.write_text(
+                'importe "util.hz"\nimprimir dobro(7)\n',
+                encoding="utf-8",
+            )
+            # O caminho também é exercitado para garantir resolução relativa.
+            saida = io.StringIO()
+            with redirect_stdout(saida):
+                executar_fonte(principal.read_text(encoding="utf-8"), principal)
+            self.assertEqual(saida.getvalue().strip(), "14")
 
 
 if __name__ == '__main__':

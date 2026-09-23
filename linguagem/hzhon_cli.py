@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""CLI alpha da Hzhon: executa programas e gera sites a partir de .hz."""
+"""CLI da Hzhon: linguagem, web, Roblox e ferramentas de projeto."""
 from __future__ import annotations
 
 import argparse
@@ -13,7 +13,7 @@ from dataclasses import dataclass, field
 from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
 from pathlib import Path
 
-from hzhon import executar_fonte
+from hzhon import HzhonErro, compilar, executar_fonte, repl
 from hzhon_luau import transpilar as transpilar_luau
 
 
@@ -167,7 +167,7 @@ def criar_site(nome: str) -> Path:
     arquivo = raiz / "site.hz"
     if arquivo.exists():
         raise FileExistsError(f"O projeto '{nome}' já existe.")
-    arquivo.write_text('''site "Meu primeiro site Hzhon"\ntema "escuro"\npagina inicio "/"\n    navegacao\n    cabecalho "ALPHA HZHON"\n        titulo "Um site escrito na minha linguagem."\n        subtitulo "Sem escrever HTML diretamente: o Hzhon gera a página final para você."\n        botao "Conhecer a linguagem" "#recursos"\n    fim\n    secao "O que posso criar"\n        cartao "Páginas"\n            texto "Landing pages, portfólios e páginas de documentação."\n        fim\n        cartao "Projetos"\n            texto "A mesma linguagem também pode organizar lógica, dados e automações."\n        fim\n    fim\n    rodape "Criado com Hzhon — programação em português."\nfim\nfim\n''', encoding="utf-8")
+    arquivo.write_text('''site "Meu primeiro site Hzhon"\ntema "escuro"\npagina inicio "/"\n    navegacao\n    cabecalho "BETA HZHON 0.7"\n        titulo "Um site escrito na minha linguagem."\n        subtitulo "Sem escrever HTML diretamente: o Hzhon gera a página final para você."\n        botao "Conhecer a linguagem" "#recursos"\n    fim\n    secao "O que posso criar"\n        cartao "Páginas"\n            texto "Landing pages, portfólios e páginas de documentação."\n        fim\n        cartao "Projetos"\n            texto "A mesma linguagem também organiza lógica, dados e automações."\n        fim\n    fim\n    rodape "Criado com Hzhon 0.7 — programação em português."\nfim\nfim\n''', encoding="utf-8")
     (raiz / "dist").mkdir()
     (raiz / "README.md").write_text(f'''# {nome}\n\nSite criado com Hzhon.\n\n```bash\nhzhon construir site.hz --saida dist\nhzhon servir dist\n```\n''', encoding="utf-8")
     return raiz
@@ -213,17 +213,101 @@ python3 ../hzhon_cli.py luau src/util.roblox.hz --alvo module -o {nome}.module.l
     return raiz
 
 
+def criar_projeto_linguagem(nome: str) -> Path:
+    raiz = Path(nome)
+    if raiz.exists():
+        raise FileExistsError(f"O projeto '{nome}' já existe.")
+    (raiz / "src").mkdir(parents=True)
+    (raiz / "src" / "main.hz").write_text(
+        '''# Projeto criado com Hzhon 0.7 beta
+var pessoa = {
+    nome: "mundo",
+    versao: 0.7
+}
+
+imprimir "Olá, " + pessoa.nome + "!"
+imprimir "Tipo: " + tipo(pessoa)
+''',
+        encoding="utf-8",
+    )
+    (raiz / "hzhon.toml").write_text(
+        f'''[projeto]
+nome = "{raiz.name}"
+versao = "0.7.0"
+entrada = "src/main.hz"
+''',
+        encoding="utf-8",
+    )
+    (raiz / "README.md").write_text(
+        f'''# {raiz.name}
+
+Projeto criado com Hzhon.
+
+```bash
+hzhon verificar src/main.hz
+hzhon executar src/main.hz
+```
+''',
+        encoding="utf-8",
+    )
+    return raiz
+
+
+def formatar_hzhon(caminho: Path) -> str:
+    """Formata blocos Hzhon sem alterar comentários ou expressões."""
+    linhas: list[str] = []
+    nivel = 0
+    fechamentos = {"fim", "senao", "senao_se", "capture"}
+    aberturas = {
+        "site",
+        "pagina",
+        "cabecalho",
+        "secao",
+        "cartao",
+        "formulario",
+        "lista",
+        "funcao",
+        "se",
+        "enquanto",
+        "para_cada",
+        "tente",
+    }
+    for original in caminho.read_text(encoding="utf-8").splitlines():
+        texto = original.strip()
+        if not texto:
+            if linhas and linhas[-1] != "":
+                linhas.append("")
+            continue
+        comando = texto.split(maxsplit=1)[0]
+        if comando in fechamentos:
+            nivel = max(0, nivel - 1)
+        linhas.append("    " * nivel + texto)
+        if comando in aberturas:
+            nivel += 1
+        if comando in {"senao", "senao_se", "capture"}:
+            nivel += 1
+    while linhas and linhas[-1] == "":
+        linhas.pop()
+    return "\n".join(linhas) + "\n"
+
+
 def main(argv=None) -> int:
-    parser = argparse.ArgumentParser(prog="hzhon", description="Linguagem Hzhon e gerador de sites em português")
+    parser = argparse.ArgumentParser(
+        prog="hzhon",
+        description="Linguagem Hzhon, gerador web e ferramentas para Roblox",
+    )
     sub = parser.add_subparsers(dest="comando")
     novo = sub.add_parser("novo", help="criar um projeto")
-    novo.add_argument("tipo", choices=["site", "roblox"])
+    novo.add_argument("tipo", choices=["projeto", "site", "roblox"])
     novo.add_argument("nome")
     construir = sub.add_parser("construir", help="gerar arquivos web a partir de um .hz")
     construir.add_argument("entrada")
     construir.add_argument("--saida", default="dist")
     executar = sub.add_parser("executar", help="executar um programa Hzhon")
     executar.add_argument("arquivo")
+    verificar = sub.add_parser("verificar", help="verificar sintaxe sem executar")
+    verificar.add_argument("arquivo")
+    sub.add_parser("repl", help="abrir o REPL interativo")
     testar = sub.add_parser("testar", help="executar a suíte de testes do projeto")
     testar.add_argument("pasta", nargs="?", default=".")
     formatar = sub.add_parser("formatar", help="formatar um arquivo Hzhon sem alterar sua lógica")
@@ -231,6 +315,7 @@ def main(argv=None) -> int:
     servir = sub.add_parser("servir", help="servir uma pasta construída")
     servir.add_argument("pasta", nargs="?", default="dist")
     servir.add_argument("--porta", type=int, default=8080)
+    servir.add_argument("--host", default="0.0.0.0")
     luau = sub.add_parser("luau", help="transpilar para Roblox/Luau beta")
     luau.add_argument("entrada")
     luau.add_argument("-o", "--saida", default=None)
@@ -238,7 +323,12 @@ def main(argv=None) -> int:
     args = parser.parse_args(argv)
     try:
         if args.comando == "novo":
-            projeto = criar_site(args.nome) if args.tipo == "site" else criar_projeto_roblox(args.nome)
+            if args.tipo == "site":
+                projeto = criar_site(args.nome)
+            elif args.tipo == "roblox":
+                projeto = criar_projeto_roblox(args.nome)
+            else:
+                projeto = criar_projeto_linguagem(args.nome)
             print(f"Projeto Hzhon criado em {projeto}/")
             return 0
         if args.comando == "construir":
@@ -246,27 +336,23 @@ def main(argv=None) -> int:
             print(f"Construção concluída: {len(arquivos)} página(s) em {args.saida}/")
             return 0
         if args.comando == "executar":
-            executar_fonte(Path(args.arquivo).read_text(encoding="utf-8"))
+            caminho = Path(args.arquivo)
+            executar_fonte(caminho.read_text(encoding="utf-8"), caminho)
             return 0
+        if args.comando == "verificar":
+            caminho = Path(args.arquivo)
+            compilar(caminho.read_text(encoding="utf-8"))
+            print(f"Sintaxe válida: {caminho}")
+            return 0
+        if args.comando == "repl":
+            return repl()
         if args.comando == "testar":
             pasta = Path(args.pasta).resolve()
             resultado = subprocess.run([sys.executable, "-m", "unittest", "discover", "-v"], cwd=pasta)
             return resultado.returncode
         if args.comando == "formatar":
             caminho = Path(args.arquivo)
-            linhas = caminho.read_text(encoding="utf-8").splitlines()
-            nivel = 0
-            saida = []
-            fechamentos = {"fim", "senao", "senao_se"}
-            aberturas = {"site", "pagina", "cabecalho", "secao", "cartao", "formulario", "lista", "funcao", "se", "enquanto", "para_cada"}
-            for linha in linhas:
-                texto = linha.strip()
-                if not texto: continue
-                comando = texto.split(maxsplit=1)[0]
-                if comando in fechamentos: nivel = max(0, nivel - 1)
-                saida.append("    " * nivel + texto)
-                if comando in aberturas: nivel += 1
-            caminho.write_text("\n".join(saida) + "\n", encoding="utf-8")
+            caminho.write_text(formatar_hzhon(caminho), encoding="utf-8")
             print(f"Arquivo formatado: {caminho}")
             return 0
         if args.comando == "luau":
@@ -278,13 +364,13 @@ def main(argv=None) -> int:
         if args.comando == "servir":
             pasta = Path(args.pasta).resolve()
             os.chdir(pasta)
-            servidor = ThreadingHTTPServer(("0.0.0.0", args.porta), SimpleHTTPRequestHandler)
-            print(f"Hzhon web em http://localhost:{args.porta}/ (Ctrl+C para parar)")
+            servidor = ThreadingHTTPServer((args.host, args.porta), SimpleHTTPRequestHandler)
+            print(f"Hzhon web em http://{args.host}:{args.porta}/ (Ctrl+C para parar)")
             servidor.serve_forever()
             return 0
         parser.print_help()
         return 0
-    except (ValueError, FileNotFoundError, FileExistsError) as exc:
+    except (ValueError, HzhonErro, FileNotFoundError, FileExistsError, OSError) as exc:
         print(f"Erro Hzhon: {exc}", file=sys.stderr)
         return 1
 

@@ -16,6 +16,8 @@ from pathlib import Path
 from hzhon import HzhonErro, compilar, executar_fonte, repl
 from hzhon_luau import transpilar as transpilar_luau
 
+VERSION = "0.7.0"
+
 
 @dataclass
 class No:
@@ -296,6 +298,7 @@ def main(argv=None) -> int:
         prog="hzhon",
         description="Linguagem Hzhon, gerador web e ferramentas para Roblox",
     )
+    parser.add_argument("--version", action="version", version=f"Hzhon {VERSION} beta")
     sub = parser.add_subparsers(dest="comando")
     novo = sub.add_parser("novo", help="criar um projeto")
     novo.add_argument("tipo", choices=["projeto", "site", "roblox"])
@@ -308,6 +311,8 @@ def main(argv=None) -> int:
     verificar = sub.add_parser("verificar", help="verificar sintaxe sem executar")
     verificar.add_argument("arquivo")
     sub.add_parser("repl", help="abrir o REPL interativo")
+    sub.add_parser("versao", help="mostrar a versão da Hzhon")
+    sub.add_parser("diagnostico", help="verificar o ambiente local da Hzhon")
     testar = sub.add_parser("testar", help="executar a suíte de testes do projeto")
     testar.add_argument("pasta", nargs="?", default=".")
     formatar = sub.add_parser("formatar", help="formatar um arquivo Hzhon sem alterar sua lógica")
@@ -346,6 +351,20 @@ def main(argv=None) -> int:
             return 0
         if args.comando == "repl":
             return repl()
+        if args.comando == "versao":
+            print(f"Hzhon {VERSION} beta")
+            return 0
+        if args.comando == "diagnostico":
+            raiz = Path(__file__).resolve().parent
+            verificacoes = {
+                "python": sys.version_info >= (3, 10),
+                "runtime": (raiz / "hzhon.py").is_file(),
+                "cli": (raiz / "hzhon_cli.py").is_file(),
+                "luau": (raiz / "hzhon_luau.py").is_file(),
+            }
+            for nome, ok in verificacoes.items():
+                print(f"{'OK' if ok else 'ERRO'} {nome}")
+            return 0 if all(verificacoes.values()) else 1
         if args.comando == "testar":
             pasta = Path(args.pasta).resolve()
             resultado = subprocess.run([sys.executable, "-m", "unittest", "discover", "-v"], cwd=pasta)

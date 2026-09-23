@@ -10,7 +10,7 @@ python3 hzhon_cli.py luau inventario.roblox.hz --alvo module -o Inventario.modul
 
 ## Recursos beta
 
-A beta suporta `game:GetService`, `PlayerAdded`, `OnServerEvent`, `FireClient`, `FireAllClients`, `SetAttribute`, `GetAttribute`, `WaitForChild`, `task.wait`, `task.spawn`, `ModuleScript` com `exportar`, `DataStoreService` com `GetAsync`/`SetAsync`, funções, listas, laços, condicionais e source hints `--#hzhon-linha`.
+A beta suporta `game:GetService`, `PlayerAdded`, `OnServerEvent`, `OnClientEvent`, `FireClient`, `FireServer`, `FireAllClients`, `RemoteFunction` com `OnServerInvoke` e `InvokeServer`, `SetAttribute`, `GetAttribute`, `WaitForChild`, `task.wait`, `task.spawn`, `ModuleScript` com `exportar`, `DataStoreService` com `GetAsync`/`SetAsync`, funções, listas, laços, condicionais e source hints `--#hzhon-linha`.
 
 ### Servidor e RemoteEvent
 
@@ -35,6 +35,27 @@ fim
 ```
 
 O resultado contém `local Inventario = {}`, uma função local, `Inventario.criar = criar` e `return Inventario`.
+
+### RemoteFunction e eventos do cliente
+
+```hzhon
+servico replicado como Replicado
+evento_remoto Atualizar em Replicado
+remoto_funcao Consultar em Replicado
+
+ouvir_cliente Atualizar com funcao(item)
+    imprimir item
+fim
+
+responder Consultar com funcao(jogador, pedido)
+    retorne pedido
+fim
+
+enviar_cliente Atualizar com item
+invocar Consultar com pedido como resposta
+```
+
+No alvo `server`, `responder` gera `OnServerInvoke`. No alvo `local`, `ouvir_cliente`, `enviar_cliente` e `invocar` geram `OnClientEvent`, `FireServer` e `InvokeServer`, respectivamente. O servidor deve validar todas as entradas recebidas do cliente.
 
 ### DataStore
 

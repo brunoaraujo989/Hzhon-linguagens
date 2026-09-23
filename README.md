@@ -12,7 +12,7 @@ Este repositório reúne o site oficial da linguagem e a implementação beta. A
 - **DSL web beta:** descreva páginas, seções, cartões e formulários em `.hz` sem escrever HTML diretamente.
 - **CLI Hzhon:** criar projetos, executar programas, construir sites, formatar arquivos, rodar testes e servir a pasta `dist`.
 - **Runtime 0.7 beta:** interpretador com variáveis, constantes, funções, listas, mapas, propriedades, módulos locais, tratamento de erros, REPL e funções nativas.
-- **Hzhon-Luau beta:** transpiler com alvos `server`, `local` e `module`, RemoteEvents, ModuleScripts, Attributes e DataStores.
+- **Hzhon-Luau beta:** transpiler com alvos `server`, `local` e `module`, RemoteEvents, RemoteFunctions, eventos cliente, ModuleScripts, Attributes e DataStores.
 - **Documentação:** especificação técnica e roadmap em `linguagem/ESPECIFICACAO_ALPHA.md`.
 
 ## Site oficial
@@ -46,6 +46,8 @@ Entre na implementação:
 ```bash
 cd linguagem
 python3 hzhon_cli.py --help
+python3 hzhon_cli.py versao
+python3 hzhon_cli.py diagnostico
 python3 -m unittest -v
 ```
 

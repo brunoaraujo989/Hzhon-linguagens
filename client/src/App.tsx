@@ -140,7 +140,7 @@ function Nav() {
           ))}
         </div>
         <div className="nav-actions">
-          <a className="nav-button" href="https://github.com" target="_blank" rel="noreferrer" data-testid="link-github">
+          <a className="nav-button" href="https://github.com/brunoaraujo989/Hzhon-linguagens" target="_blank" rel="noreferrer" data-testid="link-github">
             <Github size={14} aria-hidden="true" /> GitHub
           </a>
           <a className="nav-button primary" href="#getting-started" data-testid="link-install-top">
@@ -388,7 +388,7 @@ function Ecosystem() {
       <div className="container">
         <div className="split-heading"><div><p className="eyebrow">06 / Ecossistema</p><h2 className="display section-title">Não estás a aprender sozinho.</h2></div><p className="section-intro">Uma linguagem cresce quando encontra pessoas, ferramentas e histórias para continuar a sua conversa.</p></div>
         <div className="ecosystem-grid">
-          <a className="eco-card" href="https://github.com" target="_blank" rel="noreferrer" data-testid="link-ecosystem-github"><div><span className="eco-symbol"><Github size={15} /></span><h4>Repositório aberto</h4><p>Vê o código, abre uma issue, propõe uma palavra melhor.</p></div><span className="eco-arrow"><ArrowUpRight size={18} /></span></a>
+          <a className="eco-card" href="https://github.com/brunoaraujo989/Hzhon-linguagens" target="_blank" rel="noreferrer" data-testid="link-ecosystem-github"><div><span className="eco-symbol"><Github size={15} /></span><h4>Repositório aberto</h4><p>Vê o código, abre uma issue, propõe uma palavra melhor.</p></div><span className="eco-arrow"><ArrowUpRight size={18} /></span></a>
           <a className="eco-card" href="#docs" data-testid="link-ecosystem-guides"><div><span className="eco-symbol"><BookOpen size={15} /></span><h4>Guias de verdade</h4><p>Pequenos projetos e exemplos que não te deixam a meio.</p></div><span className="eco-arrow"><ChevronRight size={18} /></span></a>
           <a className="eco-card" href="#playground" data-testid="link-ecosystem-playground"><div><span className="eco-symbol"><Braces size={15} /></span><h4>Playground partilhável</h4><p>Experimenta uma ideia e leva o resultado para alguém.</p></div><span className="eco-arrow"><ExternalLink size={17} /></span></a>
         </div>
@@ -402,7 +402,7 @@ function Footer() {
     <footer className="footer">
       <div className="container footer-inner">
         <p>Hzhon — uma linguagem em português, feita em comunidade.</p>
-        <div className="footer-links"><a href="#top" data-testid="link-footer-top">voltar ao topo</a><a href="https://github.com" target="_blank" rel="noreferrer" data-testid="link-footer-github">github</a><a href="#roadmap" data-testid="link-footer-roadmap">roadmap</a></div>
+        <div className="footer-links"><a href="#top" data-testid="link-footer-top">voltar ao topo</a><a href="https://github.com/brunoaraujo989/Hzhon-linguagens" target="_blank" rel="noreferrer" data-testid="link-footer-github">github</a><a href="#roadmap" data-testid="link-footer-roadmap">roadmap</a></div>
       </div>
     </footer>
   );

@@ -93,6 +93,8 @@ A CLI beta permite descrever páginas em Hzhon, gerar os arquivos finais e criar
 ./bin/hzhon novo site meu-site
 ./bin/hzhon construir meu-site/site.hz --saida meu-site/dist
 ./bin/hzhon servir meu-site/dist --porta 8080
+./bin/hzhon versao
+./bin/hzhon diagnostico
 ```
 
 Um arquivo web usa blocos em português:

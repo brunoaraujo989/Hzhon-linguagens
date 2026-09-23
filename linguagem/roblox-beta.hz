@@ -4,6 +4,7 @@ servico replicado como Replicado
 servico dados como Dados
 
 evento_remoto AtualizarInventario em Replicado
+remoto_funcao ConsultarInventario em Replicado
 abrir_dados Inventarios como "HzhonInventariosV1"
 
 ouvir Jogadores.PlayerAdded com funcao(jogador)
@@ -16,4 +17,9 @@ fim
 receber AtualizarInventario com funcao(jogador, item)
     salvar Inventarios chave texto(jogador.UserId) valor item
     enviar AtualizarInventario para jogador com item
+fim
+
+responder ConsultarInventario com funcao(jogador, pedido)
+    carregar Inventarios chave texto(jogador.UserId) como inventario
+    retorne inventario
 fim

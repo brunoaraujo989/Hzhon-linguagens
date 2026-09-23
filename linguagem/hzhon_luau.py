@@ -122,8 +122,12 @@ def transpilar(fonte: str, nome_origem: str = "script.hz", alvo: str = "server")
         if m: convertido = f"local {m.group(2)} = {expr(m.group(1))}:FindFirstChild(\"{m.group(2)}\")"
         m = re.match(r"ouvir\s+(.+?)\s+com\s+funcao\s*\((.*)\)", linha)
         if m: convertido, abre = f"{m.group(1)}:Connect(function({m.group(2)})", "bloco"
+        m = re.match(r"ouvir_cliente\s+(\w+)\s+com\s+funcao\s*\((.*)\)", linha)
+        if m: convertido, abre = f"{m.group(1)}.OnClientEvent:Connect(function({m.group(2)})", "bloco"
         m = re.match(r"receber\s+(\w+)\s+com\s+funcao\s*\((.*)\)", linha)
         if m: convertido, abre = f"{m.group(1)}.OnServerEvent:Connect(function({m.group(2)})", "bloco"
+        m = re.match(r"responder\s+(\w+)\s+com\s+funcao\s*\((.*)\)", linha)
+        if m: convertido, abre = f"{m.group(1)}.OnServerInvoke = function({m.group(2)})", "bloco"
         m = re.match(r"conectar\s+(.+?)\s+com\s+(.+)", linha)
         if m: convertido = f"{m.group(1)}:Connect({expr(m.group(2))})"
         m = re.match(r"evento_remoto\s+(\w+)\s+em\s+(.+)", linha)
@@ -132,6 +136,12 @@ def transpilar(fonte: str, nome_origem: str = "script.hz", alvo: str = "server")
         if m: convertido = f"{m.group(1)}:FireClient({m.group(2)}, {expr(m.group(3))})"
         m = re.match(r"enviar_todos\s+(\w+)\s+com\s+(.+)", linha)
         if m: convertido = f"{m.group(1)}:FireAllClients({expr(m.group(2))})"
+        m = re.match(r"enviar_cliente\s+(\w+)\s+com\s+(.+)", linha)
+        if m: convertido = f"{m.group(1)}:FireServer({expr(m.group(2))})"
+        m = re.match(r"invocar\s+(\w+)\s+com\s+(.+?)\s+como\s+(\w+)", linha)
+        if m: convertido = f"local {m.group(3)} = {m.group(1)}:InvokeServer({expr(m.group(2))})"
+        m = re.match(r"remoto_funcao\s+(\w+)\s+em\s+(.+)", linha)
+        if m: convertido = f"local {m.group(1)} = {expr(m.group(2))}:WaitForChild(\"{m.group(1)}\")"
         m = re.match(r"abrir_dados\s+(\w+)\s+como\s+([\"'].*?[\"'])", linha)
         if m: convertido = f"local {m.group(1)} = Dados:GetDataStore({m.group(2)})"
         m = re.match(r"salvar\s+(\w+)\s+chave\s+(.+?)\s+valor\s+(.+)", linha)

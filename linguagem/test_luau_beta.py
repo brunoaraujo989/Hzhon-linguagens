@@ -21,6 +21,26 @@ fim
         self.assertIn(':SetAsync(tostring(jogador.UserId), valor)', luau)
         self.assertIn(':FireClient(jogador, valor)', luau)
 
+    def test_remote_function_e_evento_cliente(self):
+        fonte = '''servico replicado como Replicado
+evento_remoto Atualizar em Replicado
+remoto_funcao Consultar em Replicado
+ouvir_cliente Atualizar com funcao(item)
+ imprimir item
+fim
+responder Consultar com funcao(jogador, pedido)
+ retorne pedido
+fim
+enviar_cliente Atualizar com item
+invocar Consultar com pedido como resposta
+'''
+        server = transpilar(fonte, alvo="server")
+        local = transpilar(fonte, alvo="local")
+        self.assertIn('OnClientEvent:Connect(function(item)', local)
+        self.assertIn('OnServerInvoke = function(jogador, pedido)', server)
+        self.assertIn('Atualizar:FireServer(item)', local)
+        self.assertIn('local resposta = Consultar:InvokeServer(pedido)', local)
+
     def test_module_script(self):
         fonte = '''modulo Inventario
 funcao criar()

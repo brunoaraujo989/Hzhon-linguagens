@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import html
+import json
 import os
 import shlex
 import shutil
@@ -163,6 +164,54 @@ def construir_site(entrada: Path, saida: Path) -> list[Path]:
     return arquivos
 
 
+def analisar_jogo(caminho: Path) -> dict:
+    linhas = ler_linhas(caminho)
+    if not linhas or linhas[0][0] != "jogo":
+        raise ValueError("O arquivo de jogo deve começar com: jogo \"Nome\"")
+    jogo = {"titulo": arg(No("jogo", linhas[0][1:]), 0, "Jogo Hzhon"), "largura": 960, "altura": 540, "fundo": "#101b19", "mensagem": "Chegue ao objetivo!", "jogadores": [], "inimigos": [], "plataformas": [], "controles": {}, "objetivo": None}
+    fechou = False
+    for tokens in linhas[1:]:
+        comando, args = tokens[0], tokens[1:]
+        if comando == "fim":
+            fechou = True
+            continue
+        try:
+            if comando == "tela": jogo["largura"], jogo["altura"] = int(args[0]), int(args[1])
+            elif comando == "fundo": jogo["fundo"] = args[0]
+            elif comando == "mensagem": jogo["mensagem"] = " ".join(args)
+            elif comando in {"jogador", "inimigo"}:
+                item = {"nome": args[0], "x": float(args[1]), "y": float(args[2]), "tamanho": float(args[3]), "cor": args[4]}
+                jogo["jogadores" if comando == "jogador" else "inimigos"].append(item)
+            elif comando == "plataforma":
+                jogo["plataformas"].append({"x": float(args[0]), "y": float(args[1]), "largura": float(args[2]), "altura": float(args[3]), "cor": args[4]})
+            elif comando == "objetivo":
+                jogo["objetivo"] = {"x": float(args[0]), "y": float(args[1]), "tamanho": float(args[2]), "cor": args[3]}
+            elif comando == "controle":
+                jogo["controles"].setdefault(args[0], {})[args[1]] = args[2].lower()
+            else:
+                raise ValueError(f"Linha desconhecida no jogo: {comando}")
+        except (IndexError, ValueError) as exc:
+            raise ValueError(f"Comando de jogo inválido: {' '.join(tokens)}") from exc
+    if not fechou: raise ValueError("O jogo precisa terminar com 'fim'.")
+    if not jogo["jogadores"]: raise ValueError("O jogo precisa de pelo menos um 'jogador'.")
+    if not jogo["objetivo"]: raise ValueError("O jogo precisa de um 'objetivo'.")
+    return jogo
+
+
+def jogo_html(jogo: dict) -> str:
+    dados = json.dumps(jogo, ensure_ascii=False).replace("</", "<\\/")
+    return f'''<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{html.escape(jogo["titulo"])}</title><style>
+*{{box-sizing:border-box}}body{{margin:0;min-height:100vh;display:grid;place-items:center;background:#07100f;color:#edf3ea;font:16px system-ui,sans-serif}}main{{width:min(100%,1000px);padding:20px}}h1{{font:400 clamp(26px,5vw,48px) Georgia,serif;margin:0 0 6px}}p{{opacity:.72;margin:0 0 16px}}.game-wrap{{position:relative;border:1px solid #36514a;border-radius:16px;overflow:hidden;background:#101b19;box-shadow:0 20px 70px #0008}}canvas{{display:block;width:100%;height:auto;image-rendering:auto}}.hud{{position:absolute;inset:14px 16px auto;display:flex;justify-content:space-between;pointer-events:none;font-weight:700;text-shadow:0 2px 5px #000}}button{{border:0;border-radius:999px;padding:10px 16px;background:#bce5d2;color:#14211e;font-weight:700;cursor:pointer;margin-top:14px}}.touch{{display:flex;gap:8px;justify-content:center}}.touch button{{min-width:58px;background:#294d42;color:#edf3ea}}@media(min-width:700px){{.touch{{display:none}}}}</style></head><body><main><h1>{html.escape(jogo["titulo"])}</h1><p>Jogo criado com Hzhon — sem escrever HTML ou JavaScript.</p><div class="game-wrap"><canvas id="jogo" width="{jogo["largura"]}" height="{jogo["altura"]}"></canvas><div class="hud"><span id="estado">jogando</span><span id="pontos">0</span></div></div><div class="touch"><button data-key="left">◀</button><button data-key="up">▲</button><button data-key="right">▶</button></div><button id="reiniciar">Reiniciar jogo</button></main><script>const CONFIG={dados};const canvas=document.querySelector('#jogo'),ctx=canvas.getContext('2d'),keys={{}},estado=document.querySelector('#estado');let ganhou=false;const player={{...CONFIG.jogadores[0],vx:0,vy:0,inicioX:CONFIG.jogadores[0].x,inicioY:CONFIG.jogadores[0].y}};const inimigos=CONFIG.inimigos.map(x=>({{...x,vx:1}}));const objetivo=CONFIG.objetivo;function caixa(o){{return{{x:o.x,y:o.y,w:o.tamanho||o.largura,h:o.tamanho||o.altura}}}}function toca(a,b){{return a.x<b.x+b.w&&a.x+a.w>b.x&&a.y<b.y+b.h&&a.y+a.h>b.y}}function reiniciar(){{player.x=player.inicioX;player.y=player.inicioY;player.vx=0;player.vy=0;ganhou=false;estado.textContent='jogando'}}function desenhar(){{ctx.fillStyle=CONFIG.fundo;ctx.fillRect(0,0,canvas.width,canvas.height);CONFIG.plataformas.forEach(p=>{{ctx.fillStyle=p.cor;ctx.fillRect(p.x,p.y,p.largura,p.altura)}});inimigos.forEach(e=>{{ctx.fillStyle=e.cor;ctx.fillRect(e.x,e.y,e.tamanho,e.tamanho)}});ctx.fillStyle=objetivo.cor;ctx.fillRect(objetivo.x,objetivo.y,objetivo.tamanho,objetivo.tamanho);ctx.fillStyle=player.cor;ctx.fillRect(player.x,player.y,player.tamanho,player.tamanho)}}function atualizar(){{if(!ganhou){{const c=CONFIG.controles[player.nome]||{{esquerda:'a',direita:'d',cima:'w'}};player.vx=0;if(keys[c.esquerda]||keys['arrowleft'])player.vx=-4;if(keys[c.direita]||keys['arrowright'])player.vx=4;if((keys[c.cima]||keys['arrowup']||keys[' '])&&player.noChao)player.vy=-11;player.vy+=.5;player.x=Math.max(0,Math.min(canvas.width-player.tamanho,player.x+player.vx));const antes=player.y;player.y+=player.vy;player.noChao=false;CONFIG.plataformas.forEach(p=>{{const ch=caixa(p),pro=caixa(player);if(toca(pro,ch)&&antes+player.tamanho<=ch.y+4&&player.vy>=0){{player.y=ch.y-player.tamanho;player.vy=0;player.noChao=true}}}});if(player.y>canvas.height+80)reiniciar();inimigos.forEach(e=>{{e.x+=e.vx;if(e.x<0||e.x+e.tamanho>canvas.width)e.vx*=-1;if(toca(caixa(player),caixa(e))){{estado.textContent='tente novamente';reiniciar()}}}});if(toca(caixa(player),caixa(objetivo))){{ganhou=true;estado.textContent='vitória!'}}}}desenhar();requestAnimationFrame(atualizar)}}window.addEventListener('keydown',e=>{{keys[e.key.toLowerCase()]=true}});window.addEventListener('keyup',e=>{{keys[e.key.toLowerCase()]=false}});document.querySelectorAll('[data-key]').forEach(b=>{{b.onpointerdown=()=>keys[b.dataset.key]=true;b.onpointerup=()=>keys[b.dataset.key]=false}});document.querySelector('#reiniciar').onclick=reiniciar;atualizar();</script></body></html>'''
+
+
+def construir_jogo(entrada: Path, saida: Path) -> Path:
+    jogo = analisar_jogo(entrada)
+    saida.mkdir(parents=True, exist_ok=True)
+    destino = saida / "index.html"
+    destino.write_text(jogo_html(jogo), encoding="utf-8")
+    return destino
+
+
 def criar_site(nome: str) -> Path:
     raiz = Path(nome)
     raiz.mkdir(parents=True, exist_ok=True)
@@ -306,6 +355,9 @@ def main(argv=None) -> int:
     construir = sub.add_parser("construir", help="gerar arquivos web a partir de um .hz")
     construir.add_argument("entrada")
     construir.add_argument("--saida", default="dist")
+    jogo = sub.add_parser("jogo", help="gerar um jogo Canvas a partir de um .jogo.hz")
+    jogo.add_argument("entrada")
+    jogo.add_argument("--saida", default="dist-jogo")
     executar = sub.add_parser("executar", help="executar um programa Hzhon")
     executar.add_argument("arquivo")
     verificar = sub.add_parser("verificar", help="verificar sintaxe sem executar")
@@ -339,6 +391,10 @@ def main(argv=None) -> int:
         if args.comando == "construir":
             arquivos = construir_site(Path(args.entrada), Path(args.saida))
             print(f"Construção concluída: {len(arquivos)} página(s) em {args.saida}/")
+            return 0
+        if args.comando == "jogo":
+            arquivo = construir_jogo(Path(args.entrada), Path(args.saida))
+            print(f"Jogo Hzhon construído em: {arquivo}")
             return 0
         if args.comando == "executar":
             caminho = Path(args.arquivo)

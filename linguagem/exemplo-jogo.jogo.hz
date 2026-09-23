@@ -1,0 +1,14 @@
+jogo "Hzhon: primeira aventura"
+tela 960 540
+fundo "#10221f"
+mensagem "Chegue ao quadrado dourado!"
+jogador heroi 80 420 32 "#bce5d2"
+inimigo guarda 500 420 32 "#e56d52"
+plataforma 0 480 960 60 "#294d42"
+plataforma 180 390 220 24 "#36514a"
+plataforma 560 320 220 24 "#36514a"
+objetivo 820 420 36 "#f0c674"
+controle heroi esquerda "a"
+controle heroi direita "d"
+controle heroi cima "w"
+fim

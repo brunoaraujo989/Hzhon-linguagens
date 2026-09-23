@@ -10,6 +10,7 @@ Este repositório reúne o site oficial da linguagem e a implementação beta. A
 - **Site compilado:** a pasta `site/` já pode ser servida sem Node.js, usando a CLI Hzhon.
 - **Playground:** editor interativo com exemplos Hzhon dentro do site.
 - **DSL web beta:** descreva páginas, seções, cartões e formulários em `.hz` sem escrever HTML diretamente.
+- **DSL de jogos:** crie jogos 2D com Canvas usando arquivos `.jogo.hz`; a CLI gera uma página jogável para abrir no navegador.
 - **CLI Hzhon:** criar projetos, executar programas, construir sites, formatar arquivos, rodar testes e servir a pasta `dist`.
 - **Runtime 0.7 beta:** interpretador com variáveis, constantes, funções, listas, mapas, propriedades, módulos locais, tratamento de erros, REPL e funções nativas.
 - **Hzhon-Luau beta:** transpiler com alvos `server`, `local` e `module`, RemoteEvents, RemoteFunctions, eventos cliente, ModuleScripts, Attributes e DataStores.
@@ -143,6 +144,17 @@ fim
 ```
 
 O REPL pode ser aberto com `hzhon repl`.
+
+## Criar jogos no navegador
+
+Você escreve Hzhon; a CLI gera o Canvas e o código de navegador por baixo. Não é preciso escrever HTML ou JavaScript:
+
+```bash
+hzhon jogo exemplo-jogo.jogo.hz --saida meu-jogo
+hzhon servir meu-jogo --porta 8080
+```
+
+O formato beta inclui tela, fundo, jogador, inimigos que patrulham, plataformas, objetivo, gravidade, colisão, teclado e controles de toque no celular. O resultado é um `index.html` autocontido dentro da pasta de saída; HTML e JavaScript são detalhes gerados automaticamente.
 
 ## Roadmap
 

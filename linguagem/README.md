@@ -139,6 +139,15 @@ hzhon formatar site.hz
 hzhon servir dist --porta 8080
 ```
 
+Jogos 2D para navegador usam uma DSL própria, sem HTML ou JavaScript escrito à mão:
+
+```bash
+hzhon jogo exemplo-jogo.jogo.hz --saida meu-jogo
+hzhon servir meu-jogo --porta 8080
+```
+
+O gerador inclui Canvas, gravidade, plataformas, inimigos, colisão, objetivo, teclado e botões de toque.
+
 O instalador para Termux cria um wrapper em `$PREFIX/bin`, dentro da área executável do Termux. Isso evita o erro de permissão que pode ocorrer quando um link aponta diretamente para um arquivo guardado em `storage/downloads`.
 
 ## Licença

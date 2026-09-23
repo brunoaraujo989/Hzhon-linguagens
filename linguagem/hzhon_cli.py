@@ -15,6 +15,7 @@ from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
 from pathlib import Path
 
 from hzhon import HzhonErro, compilar, executar_fonte, repl
+from hzhon_game import gerar_html
 from hzhon_luau import transpilar as transpilar_luau
 
 VERSION = "0.7.0"
@@ -168,7 +169,7 @@ def analisar_jogo(caminho: Path) -> dict:
     linhas = ler_linhas(caminho)
     if not linhas or linhas[0][0] != "jogo":
         raise ValueError("O arquivo de jogo deve começar com: jogo \"Nome\"")
-    jogo = {"titulo": arg(No("jogo", linhas[0][1:]), 0, "Jogo Hzhon"), "largura": 960, "altura": 540, "fundo": "#101b19", "mensagem": "Chegue ao objetivo!", "jogadores": [], "inimigos": [], "plataformas": [], "controles": {}, "objetivo": None}
+    jogo = {"titulo": arg(No("jogo", linhas[0][1:]), 0, "Jogo Hzhon"), "largura": 960, "altura": 540, "fundo": "#101b19", "mensagem": "Chegue ao objetivo!", "vidas": 3, "pontos": 0, "camera": False, "dialogo": "", "som": True, "jogadores": [], "inimigos": [], "plataformas": [], "controles": {}, "objetivo": None}
     fechou = False
     for tokens in linhas[1:]:
         comando, args = tokens[0], tokens[1:]
@@ -179,6 +180,11 @@ def analisar_jogo(caminho: Path) -> dict:
             if comando == "tela": jogo["largura"], jogo["altura"] = int(args[0]), int(args[1])
             elif comando == "fundo": jogo["fundo"] = args[0]
             elif comando == "mensagem": jogo["mensagem"] = " ".join(args)
+            elif comando == "vida": jogo["vidas"] = int(args[0])
+            elif comando == "pontos": jogo["pontos"] = int(args[0])
+            elif comando == "camera": jogo["camera"] = args[0].lower() in {"seguir", "sim", "verdadeiro"}
+            elif comando == "dialogo": jogo["dialogo"] = " ".join(args)
+            elif comando == "som": jogo["som"] = args[0].lower() not in {"nao", "não", "falso"}
             elif comando in {"jogador", "inimigo"}:
                 item = {"nome": args[0], "x": float(args[1]), "y": float(args[2]), "tamanho": float(args[3]), "cor": args[4]}
                 jogo["jogadores" if comando == "jogador" else "inimigos"].append(item)
@@ -208,7 +214,7 @@ def construir_jogo(entrada: Path, saida: Path) -> Path:
     jogo = analisar_jogo(entrada)
     saida.mkdir(parents=True, exist_ok=True)
     destino = saida / "index.html"
-    destino.write_text(jogo_html(jogo), encoding="utf-8")
+    destino.write_text(gerar_html(jogo), encoding="utf-8")
     return destino
 
 

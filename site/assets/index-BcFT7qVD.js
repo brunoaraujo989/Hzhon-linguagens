@@ -444,7 +444,7 @@ fim`},luau:{label:"Luau",kicker:"joga no teu ritmo",title:"Do Hzhon para mundos 
 
 ouvir Jogadores.PlayerAdded com funcao(jogador)
   imprimir "Bem-vindo ao servidor"
-fim`},jogos:{label:"Jogos 2D",kicker:"sem HTML à vista",title:"Cria uma aventura para o browser.",body:"A DSL de jogos transforma um arquivo .jogo.hz em uma página Canvas jogável, com gravidade, colisões, inimigos, objetivo e controles de toque.",code:`jogo "Minha aventura"
+fim`},jogos:{label:"Jogos 2D",kicker:"sem HTML à vista",title:"Cria uma aventura para o browser.",body:"A DSL de jogos transforma um arquivo .jogo.hz em uma página Canvas jogável, com gravidade, câmera, colisões, inimigos, vidas, pontuação, diálogo, som e controles de toque.",code:`jogo "Minha aventura"
     tela 960 540
     jogador heroi 80 420 32 "#bce5d2"
     plataforma 0 480 960 60 "#294d42"

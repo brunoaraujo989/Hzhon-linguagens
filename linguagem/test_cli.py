@@ -50,6 +50,8 @@ class TesteCLIWeb(unittest.TestCase):
             self.assertIn('<canvas id="jogo"', html)
             self.assertIn("requestAnimationFrame(atualizar)", html)
             self.assertIn("Teste", html)
+            self.assertIn('id="vidas"', html)
+            self.assertIn("localStorage", html)
 
 
 if __name__ == "__main__":

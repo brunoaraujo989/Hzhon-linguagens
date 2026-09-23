@@ -2,6 +2,11 @@ jogo "Hzhon: primeira aventura"
 tela 960 540
 fundo "#10221f"
 mensagem "Chegue ao quadrado dourado!"
+vida 3
+pontos 0
+camera seguir
+dialogo "Use A e D para andar, W para saltar e alcance o objetivo."
+som sim
 jogador heroi 80 420 32 "#bce5d2"
 inimigo guarda 500 420 32 "#e56d52"
 plataforma 0 480 960 60 "#294d42"

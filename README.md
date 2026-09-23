@@ -154,7 +154,7 @@ hzhon jogo exemplo-jogo.jogo.hz --saida meu-jogo
 hzhon servir meu-jogo --porta 8080
 ```
 
-O formato beta inclui tela, fundo, jogador, inimigos que patrulham, plataformas, objetivo, gravidade, colisão, teclado e controles de toque no celular. O resultado é um `index.html` autocontido dentro da pasta de saída; HTML e JavaScript são detalhes gerados automaticamente.
+O formato beta inclui tela, fundo, jogador, inimigos que patrulham, plataformas, objetivo, gravidade, colisão, câmera que acompanha o jogador, vidas, pontuação, diálogo inicial, efeitos sonoros procedurais, recorde local, teclado e controles de toque no celular. O resultado é um `index.html` autocontido dentro da pasta de saída; HTML e JavaScript são detalhes gerados automaticamente.
 
 ## Roadmap
 

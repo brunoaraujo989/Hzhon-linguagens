@@ -2,13 +2,13 @@
 
 **Hzhon é uma linguagem de programação em português para aprender, criar e compartilhar software.**
 
-Este repositório reúne o site oficial da linguagem e a implementação alpha. A proposta é transformar ideias escritas em português em programas executáveis, sites, automações e, futuramente, projetos Luau/Roblox.
+Este repositório reúne o site oficial da linguagem e a implementação beta. A proposta é transformar ideias escritas em português em programas executáveis, sites, automações e projetos Luau/Roblox.
 
 ## O que existe aqui
 
 - **Site oficial:** aplicação Vite + React na raiz do repositório.
 - **Playground:** editor interativo com exemplos Hzhon dentro do site.
-- **DSL web alpha:** descreva páginas, seções, cartões e formulários em `.hz` sem escrever HTML diretamente.
+- **DSL web beta:** descreva páginas, seções, cartões e formulários em `.hz` sem escrever HTML diretamente.
 - **CLI Hzhon:** criar projetos, executar programas, construir sites, formatar arquivos, rodar testes e servir a pasta `dist`.
 - **Runtime:** interpretador inicial com variáveis, constantes, funções, listas, condicionais, laços, operadores e funções nativas.
 - **Hzhon-Luau beta:** transpiler com alvos `server`, `local` e `module`, RemoteEvents, ModuleScripts, Attributes e DataStores.
@@ -56,6 +56,12 @@ No Termux, use o instalador:
 cd ~/storage/downloads/Hzhon/linguagem
 bash instalar-termux.sh
 hzhon --help
+```
+
+Criar um projeto Roblox com exemplos de servidor, cliente e módulo:
+
+```bash
+hzhon novo roblox meu-jogo
 ```
 
 ## Exemplo Hzhon

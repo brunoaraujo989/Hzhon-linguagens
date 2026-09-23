@@ -173,11 +173,51 @@ def criar_site(nome: str) -> Path:
     return raiz
 
 
+def criar_projeto_roblox(nome: str) -> Path:
+    raiz = Path(nome)
+    if raiz.exists():
+        raise FileExistsError(f"O projeto '{nome}' já existe.")
+    (raiz / "src").mkdir(parents=True)
+    (raiz / "src" / "server.roblox.hz").write_text('''servico jogadores como Jogadores
+ouvir Jogadores.PlayerAdded com funcao(jogador)
+    imprimir "Jogador conectado: " + texto(jogador.Name)
+fim
+''', encoding="utf-8")
+    (raiz / "src" / "client.roblox.hz").write_text('''servico jogadores como Jogadores
+servico entrada como Entrada
+var jogador = Jogadores.LocalPlayer
+
+ouvir Entrada.InputBegan com funcao(input, processado)
+    se processado == falso
+        imprimir "Entrada recebida por " + texto(jogador.Name)
+    fim
+fim
+''', encoding="utf-8")
+    (raiz / "src" / "util.roblox.hz").write_text('''modulo Util
+funcao dizer(mensagem)
+    imprimir mensagem
+fim
+exportar dizer
+fim
+''', encoding="utf-8")
+    (raiz / "README.md").write_text(f'''# {nome}
+
+Projeto Roblox criado com Hzhon-Luau beta.
+
+```bash
+python3 ../hzhon_cli.py luau src/server.roblox.hz --alvo server -o {nome}.server.luau
+python3 ../hzhon_cli.py luau src/client.roblox.hz --alvo local -o {nome}.client.luau
+python3 ../hzhon_cli.py luau src/util.roblox.hz --alvo module -o {nome}.module.luau
+```
+''', encoding="utf-8")
+    return raiz
+
+
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(prog="hzhon", description="Linguagem Hzhon e gerador de sites em português")
     sub = parser.add_subparsers(dest="comando")
     novo = sub.add_parser("novo", help="criar um projeto")
-    novo.add_argument("tipo", choices=["site"])
+    novo.add_argument("tipo", choices=["site", "roblox"])
     novo.add_argument("nome")
     construir = sub.add_parser("construir", help="gerar arquivos web a partir de um .hz")
     construir.add_argument("entrada")
@@ -198,8 +238,8 @@ def main(argv=None) -> int:
     args = parser.parse_args(argv)
     try:
         if args.comando == "novo":
-            projeto = criar_site(args.nome)
-            print(f"Projeto Hzhon criado em {projeto}/site.hz")
+            projeto = criar_site(args.nome) if args.tipo == "site" else criar_projeto_roblox(args.nome)
+            print(f"Projeto Hzhon criado em {projeto}/")
             return 0
         if args.comando == "construir":
             arquivos = construir_site(Path(args.entrada), Path(args.saida))

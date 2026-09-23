@@ -2,7 +2,7 @@
 
 **Hzhon** é uma linguagem de programação experimental em português. A implementação de referência é um interpretador escrito em Python, com lexer, parser, AST implícita e ambiente de execução.
 
-> O runtime atual é o núcleo executável da Hzhon 0.1. A especificação de evolução alpha está em [ESPECIFICACAO_ALPHA.md](ESPECIFICACAO_ALPHA.md).
+> O runtime atual integra a beta 0.5 da Hzhon. A especificação histórica está em [ESPECIFICACAO_ALPHA.md](ESPECIFICACAO_ALPHA.md), e a evolução Roblox está em [ROBLOX_BETA.md](ROBLOX_BETA.md).
 
 ## Executar
 
@@ -50,11 +50,11 @@ O fluxo de execução é simples e foi mantido explícito para facilitar a evolu
 3. O **interpretador** avalia expressões e executa comandos em ambientes encadeados.
 4. `Funcao` representa funções Hzhon e também funções nativas do runtime.
 
-## Estado da alpha
+## Estado da beta
 
 A especificação alpha cobre tipagem gradual, mapas, `escolha`, erros estruturados, módulos, REPL, biblioteca padrão, testes, ferramentas, interoperabilidade, Hzhon-Luau, Roblox, interfaces e persistência. O núcleo executável será expandido por marcos verificáveis, sem fingir que uma funcionalidade planejada já está pronta.
 
-- **0.1 experimental:** implementado neste repositório.
+- **0.1 experimental:** base histórica implementada neste repositório.
 - **0.2 alpha:** mapas, tipos opcionais, `escolha`, erros estruturados, REPL e módulos locais.
 - **0.5 beta:** bytecode, biblioteca padrão, testes nativos, formatador, linter e extensão VS Code.
 - **1.0 estável:** pacotes, FFI, WebAssembly, backend Luau e compatibilidade retroativa.
@@ -67,7 +67,7 @@ python3 -m unittest -v
 
 ## Criar sites com Hzhon
 
-A CLI alpha permite descrever uma página em Hzhon e gerar os arquivos finais sem escrever HTML diretamente:
+A CLI beta permite descrever páginas em Hzhon, gerar os arquivos finais e criar projetos Roblox sem escrever HTML ou Luau diretamente:
 
 ```bash
 ./bin/hzhon novo site meu-site
@@ -98,6 +98,14 @@ fim
 
 O comando `construir` gera `index.html` e o comando `servir` inicia um servidor local compatível com Linux e Termux. O arquivo `site-demo.hz` deste repositório é um exemplo real usado nos testes da alpha.
 
+Para criar um projeto Roblox beta:
+
+```bash
+hzhon novo roblox meu-jogo
+```
+
+Isso cria exemplos de servidor, cliente e módulo em `src/`, prontos para serem transpilados para Luau.
+
 ### Comandos multifuncionais
 
 Além da web, a CLI reúne operações de desenvolvimento:
@@ -117,4 +125,4 @@ Protótipo inicial disponibilizado sob licença MIT.
 
 ## Roblox e Luau
 
-A variante Hzhon-Luau transpila scripts Roblox escritos em português para Luau. Use `python3 hzhon_cli.py luau inventario.roblox.hz -o inventario.server.luau`. Consulte `ROBLOX.md` para os recursos alpha, limites e fluxo com Rojo/Roblox Studio.
+A variante Hzhon-Luau beta transpila scripts Roblox escritos em português para Luau. Use `python3 hzhon_cli.py luau inventario.roblox.hz --alvo server -o inventario.server.luau`. Consulte `ROBLOX_BETA.md` para RemoteEvents, ModuleScripts, DataStores e o fluxo com Roblox Studio.

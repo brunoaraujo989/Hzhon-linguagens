@@ -54,6 +54,8 @@ const navItems = [
   ["Roadmap", "#roadmap"],
 ] as const;
 
+const GITHUB_URL = "https://github.com/brunoaraujo989/Hzhon-linguagens";
+
 const pillars = [
   {
     icon: BookOpen,
@@ -95,8 +97,8 @@ const capabilities = [
 
 const roadmap = [
   { version: "0.1", label: "Protótipo", status: "concluído", text: "Interpretador executável, sintaxe base, funções, listas e estruturas de controle." },
-  { version: "0.2", label: "Alpha", status: "agora", text: "Tipagem gradual, mapas, escolha, erros como valores, REPL e módulos locais." },
-  { version: "0.5", label: "Beta", status: "planejado", text: "Bytecode, biblioteca padrão, testes nativos, formatador e Language Server." },
+  { version: "0.4", label: "Alpha", status: "concluído", text: "Runtime, gerador web, CLI Termux e primeira saída Hzhon-Luau para Roblox." },
+  { version: "0.5", label: "Beta", status: "agora", text: "RemoteEvents, ModuleScripts, DataStores, alvos server/local/module e projetos Roblox gerados." },
   { version: "1.0", label: "Estável", status: "visão", text: "Pacotes, FFI, WebAssembly, backend Luau e compatibilidade retroativa." },
 ];
 
@@ -113,6 +115,12 @@ function scrollToId(id: string) {
 }
 
 function CodeWindow({ code, label = "exemplo.hz", light = false }: { code: string; label?: string; light?: boolean }) {
+  const [copied, setCopied] = useState(false);
+  function copyCode() {
+    navigator.clipboard?.writeText(code);
+    setCopied(true);
+    window.setTimeout(() => setCopied(false), 1800);
+  }
   return (
     <div className={`code-window ${light ? "code-window-light" : ""}`}>
       <div className="code-window-bar">
@@ -120,8 +128,8 @@ function CodeWindow({ code, label = "exemplo.hz", light = false }: { code: strin
         <span className="traffic traffic-yellow" />
         <span className="traffic traffic-green" />
         <span className="code-file">{label}</span>
-        <button className="icon-button small" aria-label="Copiar exemplo" onClick={() => navigator.clipboard?.writeText(code)}>
-          <Copy size={14} />
+        <button className="icon-button small" aria-label={copied ? "Código copiado" : "Copiar exemplo"} onClick={copyCode}>
+          {copied ? <Check size={14} /> : <Copy size={14} />}
         </button>
       </div>
       <pre><code>{code}</code></pre>
@@ -157,7 +165,7 @@ export default function Home() {
   }
 
   function copyInstall() {
-    navigator.clipboard?.writeText("git clone https://github.com/hzhon-lang/hzhon.git && cd hzhon && python3 hzhon.py exemplo.hz");
+    navigator.clipboard?.writeText("git clone https://github.com/brunoaraujo989/Hzhon-linguagens.git && cd Hzhon-linguagens/linguagem && bash instalar-termux.sh && hzhon --help");
     setCopied(true);
     window.setTimeout(() => setCopied(false), 1800);
   }
@@ -187,7 +195,7 @@ export default function Home() {
           <div className="hero-orbit hero-orbit-two" />
           <div className="hero-content page-width">
             <div className="hero-copy">
-              <div className="eyebrow"><span className="pulse-dot" /> versão alpha em construção</div>
+              <div className="eyebrow"><span className="pulse-dot" /> versão beta em construção</div>
               <h1>Programar também é <em>pertencer</em> à própria língua.</h1>
               <p className="hero-lead">Hzhon é uma linguagem de programação em português para aprender, criar e compartilhar software com menos tradução entre a ideia e o código.</p>
               <div className="hero-actions">
@@ -197,7 +205,7 @@ export default function Home() {
               <div className="hero-meta"><span><span className="meta-check">✓</span> código aberto</span><span><span className="meta-check">✓</span> MIT License</span><span><span className="meta-check">✓</span> feito para lusófonos</span></div>
             </div>
             <div className="hero-code-wrap">
-              <div className="hero-code-label"><Terminal size={14} /> hzhon / primeiro-programa.hz <span>● alpha</span></div>
+              <div className="hero-code-label"><Terminal size={14} /> hzhon / primeiro-programa.hz <span>● beta</span></div>
               <CodeWindow code={alphaCode} label="primeiro-programa.hz" />
               <div className="hero-code-result"><span>saída</span><strong>Olá, mundo!</strong><small>0.004s · sem dependências</small></div>
             </div>
@@ -209,7 +217,7 @@ export default function Home() {
           <div className="manifesto-intro">
             <SectionKicker>POR QUE HZHON</SectionKicker>
             <h2>Uma base nova para uma comunidade que já existe.</h2>
-            <p>O alpha não tenta esconder que é pequeno. Ele entrega uma experiência coerente para que a linguagem possa crescer junto com quem a usa.</p>
+            <p>A beta não tenta esconder que ainda está crescendo. Ela entrega uma experiência coerente para que a linguagem avance junto com quem a usa.</p>
             <a href="#documentacao" className="text-link">Conheça as decisões de design <ArrowRight size={15} /></a>
           </div>
           <div className="pillar-grid">
@@ -223,30 +231,30 @@ export default function Home() {
         <section className="signal-section">
           <div className="page-width signal-inner">
             <div className="signal-statement"><span className="quote-mark">“</span><p>Se a primeira barreira para programar é traduzir cada palavra, Hzhon começa removendo essa barreira.</p><span className="signal-caption">manifesto hzhon / 001</span></div>
-            <div className="signal-stats"><div><strong>0.1</strong><span>versão atual</span></div><div><strong>5</strong><span>testes passando</span></div><div><strong>MIT</strong><span>licença aberta</span></div></div>
+            <div className="signal-stats"><div><strong>0.5</strong><span>beta atual</span></div><div><strong>12</strong><span>testes passando</span></div><div><strong>MIT</strong><span>licença aberta</span></div></div>
           </div>
         </section>
 
         <section className="alpha-section page-width" id="documentacao">
-          <div className="section-heading split-heading"><div><SectionKicker>O ALPHA</SectionKicker><h2>Pequeno no tamanho.<br /><em>Grande no caminho.</em></h2></div><p>A Hzhon alpha é o primeiro corte vertical da linguagem: uma experiência executável, documentada e pronta para receber novas ideias.</p></div>
+          <div className="section-heading split-heading"><div><SectionKicker>A BETA</SectionKicker><h2>Pequena no tamanho.<br /><em>Grande no caminho.</em></h2></div><p>A Hzhon beta transforma o protótipo em uma ferramenta testável: runtime, web, Termux e Luau para Roblox em um só projeto.</p></div>
           <div className="alpha-layout">
             <div className="alpha-feature-list">
               {alphaFeatures.map((feature, index) => <div className="feature-row" key={feature}><span className="feature-index">0{index + 1}</span><span>{feature}</span><Check size={16} /></div>)}
             </div>
-            <div className="alpha-side-note"><div className="note-icon"><Layers3 size={18} /></div><h3>O que é uma alpha?</h3><p>Uma promessa com limites claros. O núcleo funciona hoje; os recursos avançados estão especificados, testáveis e visíveis no roadmap.</p><a href="#roadmap" className="text-link">Ver o mapa de evolução <ArrowRight size={15} /></a></div>
+            <div className="alpha-side-note"><div className="note-icon"><Layers3 size={18} /></div><h3>O que é a beta?</h3><p>Uma versão para testar de verdade. O núcleo funciona, a CLI roda no Termux e a camada Luau já gera scripts para servidor, cliente e módulos.</p><a href="#roadmap" className="text-link">Ver o mapa de evolução <ArrowRight size={15} /></a></div>
           </div>
         </section>
 
         <section className="playground-section" id="playground">
           <div className="page-width">
-            <div className="section-heading playground-heading"><div><SectionKicker>PLAYGROUND</SectionKicker><h2>Escreva. Rode.<br /><em>Entenda.</em></h2></div><p>Um espaço seguro para experimentar a sintaxe. Esta demo roda no navegador com exemplos guiados enquanto o runtime alpha evolui.</p></div>
+            <div className="section-heading playground-heading"><div><SectionKicker>PLAYGROUND BETA</SectionKicker><h2>Escreva. Rode.<br /><em>Entenda.</em></h2></div><p>Um espaço seguro para experimentar a sintaxe. A beta também pode gerar sites e scripts Luau a partir do Termux.</p></div>
             <div className="playground-shell">
               <div className="playground-editor">
                 <div className="editor-toolbar"><span><span className="editor-dot" /> playground.hz</span><span>{lineCount} linhas</span></div>
                 <textarea value={playCode} onChange={(event) => setPlayCode(event.target.value)} spellCheck={false} aria-label="Editor de código Hzhon" />
                 <div className="editor-footer"><button className="button button-run" onClick={runCode} disabled={isRunning}>{isRunning ? <span className="spinner" /> : <Play size={15} fill="currentColor" />} {isRunning ? "Executando" : "Executar"}</button><button className="reset-button" onClick={() => setPlayCode(alphaCode)}>restaurar exemplo</button></div>
               </div>
-              <div className="playground-output"><div className="output-head"><span><span className="output-dot" /> console</span><span>hzhon alpha runtime</span></div><div className="output-body"><span className="output-prompt">$ hzhon playground.hz</span><pre>{consoleOutput}</pre></div><div className="output-foot"><span>estado</span><strong><span className="status-dot" /> pronto</strong></div></div>
+              <div className="playground-output"><div className="output-head"><span><span className="output-dot" /> console</span><span>hzhon beta runtime</span></div><div className="output-body"><span className="output-prompt">$ hzhon playground.hz</span><pre>{consoleOutput}</pre></div><div className="output-foot"><span>estado</span><strong><span className="status-dot" /> pronto</strong></div></div>
             </div>
           </div>
         </section>
@@ -266,7 +274,7 @@ export default function Home() {
         <section className="compare-section page-width">
           <div className="section-heading"><SectionKicker>NO ECOSSISTEMA</SectionKicker><h2>Não é uma cópia.<br /><em>É um ponto de entrada.</em></h2></div>
           <div className="compare-table-wrap"><table className="compare-table"><thead><tr><th>critério</th><th className="current-col">Hzhon</th><th>Python</th><th>JavaScript</th><th>Luau</th></tr></thead><tbody>{compareRows.map((row) => <tr key={row[0]}>{row.map((cell, index) => <td key={cell} className={index === 1 ? "current-col" : ""}>{index === 0 ? <strong>{cell}</strong> : cell}</td>)}</tr>)}</tbody></table></div>
-          <p className="table-caption">Comparação de posicionamento para a versão alpha. Hzhon ainda está construindo seu ecossistema.</p>
+          <p className="table-caption">Comparação de posicionamento para a beta. Hzhon já conecta runtime, web, Termux e Roblox.</p>
         </section>
 
         <section className="roadmap-section" id="roadmap">
@@ -277,11 +285,11 @@ export default function Home() {
         </section>
 
         <section className="start-section page-width" id="comece">
-          <div className="start-card"><div className="start-noise" /><div className="start-copy"><SectionKicker>PRIMEIRO PASSO</SectionKicker><h2>Seu próximo projeto pode começar em português.</h2><p>Baixe o protótipo, leia o guia e ajude a decidir o que a Hzhon vai ser.</p><div className="start-actions"><button className="button button-light" onClick={copyInstall}>{copied ? <Check size={16} /> : <Download size={16} />} {copied ? "Comando copiado" : "Copiar comando"}</button><a className="button button-outline-light" href="https://github.com" target="_blank" rel="noreferrer">Ver no GitHub <Github size={16} /></a></div></div><div className="start-symbol"><span>H</span><span>zhon</span></div></div>
+          <div className="start-card"><div className="start-noise" /><div className="start-copy"><SectionKicker>PRIMEIRO PASSO</SectionKicker><h2>Seu próximo projeto pode começar em português.</h2><p>Baixe a beta no seu Termux, leia o guia e ajude a decidir o que a Hzhon vai ser.</p><div className="start-actions"><button className="button button-light" onClick={copyInstall}>{copied ? <Check size={16} /> : <Download size={16} />} {copied ? "Comando copiado" : "Copiar comando"}</button><a className="button button-outline-light" href={GITHUB_URL} target="_blank" rel="noreferrer">Ver no GitHub <Github size={16} /></a></div></div><div className="start-symbol"><span>H</span><span>zhon</span></div></div>
         </section>
       </main>
 
-      <footer className="site-footer"><div className="page-width footer-inner"><div className="footer-brand"><span className="brand-mark"><span>H</span></span><div><strong>hzhon<span>.</span></strong><small>programação em português</small></div></div><div className="footer-links"><a href="#documentacao">documentação</a><a href="#roadmap">roadmap</a><a href="https://github.com" target="_blank" rel="noreferrer">github <ExternalLink size={13} /></a></div><div className="footer-copy">feito para aprender, criar e compartilhar.<br /><span>© 2026 Hzhon Project</span></div></div></footer>
+      <footer className="site-footer"><div className="page-width footer-inner"><div className="footer-brand"><span className="brand-mark"><span>H</span></span><div><strong>hzhon<span>.</span></strong><small>programação em português</small></div></div><div className="footer-links"><a href="#documentacao">documentação</a><a href="#roadmap">roadmap</a><a href={GITHUB_URL} target="_blank" rel="noreferrer">github <ExternalLink size={13} /></a></div><div className="footer-copy">feito para aprender, criar e compartilhar.<br /><span>© 2026 Hzhon Project</span></div></div></footer>
     </div>
   );
 }
